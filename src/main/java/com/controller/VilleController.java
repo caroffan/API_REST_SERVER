@@ -1,39 +1,40 @@
 package com.controller;
 
+import beans.Ville;
 import com.dao.Bdd;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class VilleController {
-
 	// fonction pour récupérer le contenu de la BDD
-	@RequestMapping(value="/ville", method=RequestMethod.GET)
-	public ArrayList<String> get(@RequestParam(required  = false, value="codePostal") String codePostal) {
-		System.out.println("get");
-		ArrayList<String> villes = new ArrayList<String>();
 
+	@GetMapping("/villes")
+	List<Ville> all() {
+		List<Ville> villes;
+		Bdd bdd = new Bdd();
+		villes = bdd.recupererVilles();
+
+		return villes;
+	}
+
+	@GetMapping("/villes/{codePostal}")
+	public List<Ville> getVillesByCodePostal(@PathVariable String codePostal) {
+		List<Ville> villes;
 		Bdd bdd = new Bdd();
 		villes = bdd.recupererVille(codePostal);
 
 		return villes;
 	}
 	
-	@RequestMapping(value="/villeEntree", method=RequestMethod.GET)
-	public String get(@RequestParam(required  = true, value="nomCommune") String nomCommune,
-								 @RequestParam(required  = true, value="codePostal") String codePostal) {
-
-		System.out.println("get");
-		ArrayList<String> villes = new ArrayList<String>();
-
+	@PostMapping("/villes")
+	public String newVille(@RequestBody Ville newVille) {
 		Bdd bdd = new Bdd();
-		bdd.enregistrerVille(nomCommune, codePostal);
-
-		return "ok";
+		bdd.enregistrerVille(newVille);
+		return "Ville ajoutée";
 	}
 
 }
