@@ -35,4 +35,21 @@ public class VilleController {
 		return "Ville ajoutée";
 	}
 
+	@DeleteMapping("/villes/{codeCommune}")
+	public String deleteVille(@PathVariable String codeCommune) {
+		bdd.supprimerVille(codeCommune);
+		return "Ville supprimée";
+	}
+
+	@PutMapping("/villes/{codeCommune}")
+	public String updateVille(@PathVariable String codeCommune, @RequestBody Ville newVille) {
+		bdd.modifierVille(codeCommune, newVille);
+		return "Ville modifiée";
+	}
+
+	@PutMapping("/villes/{codeCommune}/{nomColonne}")
+	public String udpdateColonneVille(@PathVariable String codeCommune, @PathVariable String nomColonne, @RequestBody String newValue) {
+		bdd.modifierColonneVille(codeCommune, nomColonne, newValue);
+		return "Ville modifiée";
+	}
 }
