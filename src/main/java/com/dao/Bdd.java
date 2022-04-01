@@ -186,14 +186,13 @@ public class Bdd {
         }
     }
 
-
     public void modifierColonneVille(String codeCommune, String nomColonne, String newValue) {
         PreparedStatement preparedStatement = null;
         loadDatabase();
 
         try {
             // Exécution de la requête
-            String requete = "UPDATE ville_france SET" +nomColonne+"=? WHERE Code_commune_INSEE=?;";
+            String requete = "UPDATE ville_france SET " +nomColonne+"=? WHERE Code_commune_INSEE=?;";
 
             preparedStatement = connexion.prepareStatement(requete);
             preparedStatement.setString(1, newValue);

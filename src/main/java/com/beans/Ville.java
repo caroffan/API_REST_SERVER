@@ -1,6 +1,5 @@
 package com.beans;
 
-import org.springframework.stereotype.Component;
 
 public class Ville {
     private String codeCommune;
