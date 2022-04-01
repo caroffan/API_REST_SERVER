@@ -1,5 +1,7 @@
 package com.dao;
 
+import beans.Ville;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -26,11 +28,11 @@ public class Bdd {
         }
     }
 
-    public ArrayList<String> recupererVille(String codePostal) {
+    public List<Ville> recupererVille(String codePostal) {
 
         PreparedStatement preparedStatement = null;
         ResultSet res = null;
-        ArrayList<String> villes = new ArrayList<String>();
+        ArrayList<Ville> villes = new ArrayList<>();
 
         loadDatabase();
 
@@ -45,9 +47,15 @@ public class Bdd {
 
             // Récupération des données
             while (res.next()) {
-                villes.add(res.getString("Nom_commune"));
-
-
+                Ville ville = new Ville();
+                ville.setCodeCommune(res.getString("Code_commune_INSEE"));
+                ville.setNomCommune(res.getString("Nom_commune"));
+                ville.setCodePostal(res.getString("Code_postal"));
+                ville.setLibelleAcheminement(res.getString("Libelle_acheminement"));
+                ville.setLigne5(res.getString("Ligne_5"));
+                ville.setLatitude(res.getString("Latitude"));
+                ville.setLongitude(res.getString("Longitude"));
+                villes.add(ville);
             }
 
         }catch (SQLException e) {
@@ -56,17 +64,52 @@ public class Bdd {
 
     }
 
-    public void enregistrerVille(String nomCommune, String codePostal) {
+    public List<Ville> recupererVilles() {
+
+        PreparedStatement preparedStatement = null;
+        ResultSet res = null;
+        ArrayList<Ville> villes = new ArrayList<>();
+
+        loadDatabase();
+
+        try {
+
+
+            // Exécution de la requête
+            String requete = "SELECT * FROM ville_france";
+            preparedStatement = connexion.prepareStatement(requete);
+            res = preparedStatement.executeQuery();
+
+            // Récupération des données
+            while (res.next()) {
+                Ville ville = new Ville();
+                ville.setCodeCommune(res.getString("Code_commune_INSEE"));
+                ville.setNomCommune(res.getString("Nom_commune"));
+                ville.setCodePostal(res.getString("Code_postal"));
+                ville.setLibelleAcheminement(res.getString("Libelle_acheminement"));
+                ville.setLigne5(res.getString("Ligne_5"));
+                ville.setLatitude(res.getString("Latitude"));
+                ville.setLongitude(res.getString("Longitude"));
+                villes.add(ville);
+            }
+
+        }catch (SQLException e) {
+        }
+        return villes;
+
+    }
+    public void enregistrerVille(Ville newVille) {
 
         PreparedStatement preparedStatement = null;
         loadDatabase();
 
         try {
             // Exécution de la requête
-            String requete = "INSERT INTO ville_france VALUES ('',?,?,'','','','');";
+            String requete = "INSERT INTO ville_france VALUES (?,?,?,'','','','');";
             preparedStatement = connexion.prepareStatement(requete);
-            preparedStatement.setString(1, nomCommune);
-            preparedStatement.setString(2, codePostal);
+            preparedStatement.setString(1, newVille.getCodeCommune());
+            preparedStatement.setString(2, newVille.getNomCommune());
+            preparedStatement.setString(3, newVille.getCodePostal());
             preparedStatement.executeUpdate();
 
         }catch (SQLException e) {
