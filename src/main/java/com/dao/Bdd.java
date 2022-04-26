@@ -23,7 +23,7 @@ public class Bdd {
         }
 
         try {
-            connexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/france", "root", "");
+            connexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/ville_france", "root", "");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -144,7 +144,6 @@ public class Bdd {
             System.out.println(e);
         }
     }
-
 
     public void supprimerVille(String codeCommune) {
         PreparedStatement preparedStatement = null;
